@@ -1,0 +1,15 @@
+Hello,world,hadoop
+Test,text
+Java,generate
+Hello,world,hadoop
+Test,text
+Java,generate
+Hello,world,hadoop
+Test,text
+Java,generate
+Hello,world,hadoop
+Test,text
+Java,generate
+Hello,world,hadoop
+Test,text
+Java,generate
