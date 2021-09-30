@@ -1,0 +1,196 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	<%@taglib uri="http://www.springframework.org/tags" prefix="spring"  %>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<Link href="img/logo.ico" rel="Shortcut Icon">
+<title><spring:message code="title"></spring:message> </title>
+
+<!-- bootstrap加载 -->
+<link rel="stylesheet" type="text/css"
+	href="<%=basePath%>css/bootstrap.css">
+<script src="<%=basePath%>js/jquery-1.11.1.js" type="text/javascript"></script>
+<script type="text/javascript" src="<%=basePath%>js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/theme.css">
+
+<!-- Le fav and touch icons -->
+<!-- Demo page code -->
+<script type="text/javascript">
+	$(function() {
+		var match = document.cookie.match(new RegExp('color=([^;]+)'));
+		if (match)
+			var color = match[1];
+		if (color) {
+			$('body').removeClass(function(index, css) {
+				return (css.match(/\btheme-\S+/g) || []).join(' ')
+			})
+			$('body').addClass('theme-' + color);
+		}
+		$('[data-popover="true"]').popover({
+			html : true
+		});
+
+	});
+</script>
+<style type="text/css">
+#line-chart {
+	height: 300px;
+	width: 800px;
+	margin: 0px auto;
+	margin-top: 1em;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+	color: #fff;
+}
+</style>
+
+<script type="text/javascript">
+	$(function() {
+		var uls = $('.sidebar-nav > ul > *').clone();
+		uls.addClass('visible-xs');
+		$('#main-menu').append(uls.clone());
+	});
+</script>
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+
+
+
+<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
+<!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
+<!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+</head>
+<body class=" theme-blue">
+	<div class="navbar navbar-default" role="navigation">
+		<div class="navbar-header">
+			<a class="" href="index.html"><span class="navbar-brand"><span
+					class="glyphicon glyphicon-send"></span> CNItcast</span></a>
+		</div>
+
+		<div class="navbar-collapse collapse" style="height: 1px;">
+			<ul id="main-menu" class="nav navbar-nav navbar-right">
+				<li class="dropdown hidden-xs"><a href="#"
+					class="dropdown-toggle" data-toggle="dropdown"> <span
+						class="glyphicon glyphicon-user"></span> Xu longping<span
+						class="caret"></span>
+				</a>
+
+					<ul class="dropdown-menu">
+						<li><a href="./">My Account</a></li>
+						<li class="divider"></li>
+						<li class="dropdown-header">Admin Panel</li>
+						<li><a href="#">Users</a></li>
+						<li><a href="#">Security</a></li>
+						<li><a tabindex="-1" href="#">Payments</a></li>
+						<li class="divider"></li>
+						<li><a tabindex="-1" href="<%=basePath%>login.jsp">Logout</a></li>
+					</ul></li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- 左侧导航栏 -->
+	<div class="left-nav">
+		<ul>
+			<li><a href="#" data-target=".mainpage-menu" class="nav-header"
+				data-toggle="collapse"> <span class="glyphicon glyphicon-home"></span>Main
+					Page <span class="glyphicon glyphicon-chevron"></span>
+			</a></li>
+			<li><ul class="mainpage-menu nav nav-list collapse in">
+
+
+					<li><a href="<%=basePath%>nwquality_testpointCount?viewId=testpointCount"><span class="glyphicon glyphicon-play"></span>连接点总数</a></li>
+
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>连接点数排名</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>网络速率排名</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>App流量排名</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>手机网络性能排名</a></li>
+					<li><a href="<%=basePath%>showAllPointGeog"  target="rightFrame"><span class="glyphicon glyphicon-play"></span>连接点地理分布</a></li>
+				 </ul></li> 
+
+			<li><a href="#" data-target=".signalCoverage-menu"
+				class="nav-header collapsed" data-toggle="collapse"> <i
+					class="glyphicon glyphicon-signal"></i>Signal Coverage <i
+					class="glyphicon glyphicon-chevron"></i>
+			</a></li>
+			<li>
+			<ul class="signalCoverage-menu nav nav-list collapse">
+					<li><a href="Masspoint.html"  target="rightFrame"><span class="glyphicon glyphicon-play"></span>信号强度热图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>Landmark信号强度跟踪图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>Landmark信号强度统计图</a></li>
+			</ul></li>
+
+			<li><a href="#" data-target=".network-menu"
+				class="nav-header collapsed" data-toggle="collapse"> <i
+					class="glyphicon glyphicon-th-list"></i> Network Quality <span
+					class="glyphicon glyphicon-chevron"></span>
+			</a></li>
+			<li><ul class="network-menu nav nav-list collapse">
+					<li><a href="TilePoint.html"   target="rightFrame"><span class="glyphicon glyphicon-play"></span>网络质量瓷砖图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>Landmark信号强度跟踪图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>Landmark网络质量跟踪图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>Landmark网络质量统计图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>数据连接成功率点图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>数据连接成功率统计图</a></li>
+				</ul></li>
+			<li><a href="#" data-target=".app-menu"
+				class="nav-header collapsed" data-toggle="collapse"> <i
+					class="glyphicon glyphicon-phone"></i> App Map <span
+					class="glyphicon glyphicon-chevron"></span>
+			</a></li>
+			<li><ul class="app-menu nav nav-list collapse">
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>热门App使用分布图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>热门App使用统计图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>App分布图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>Landmark热门App使用排名</a></li>
+				</ul></li>
+			<li><a href="#" data-target=".device-menu"
+				class="nav-header collapsed" data-toggle="collapse"> <i
+					class="glyphicon glyphicon-hd-video"></i> Device Map <span
+					class="glyphicon glyphicon-chevron"></span>
+			</a></li>
+			<li><ul class="device-menu nav nav-list collapse">
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>热门手机使用分布图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>手机网络质量瓷砖图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>热门手机使用统计图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>手机分布图</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-play"></span>OS使用分布图</a></li>
+				</ul></li>
+		</ul>
+	</div>
+	<!-- 右侧内容 -->
+	<div class="content">
+		<iframe src="<%=basePath%>rightContent.jsp" name="rightFrame"
+			id="righrtFrame" frameborder="0" scrolling="no"
+			style="width: 100%; height: 100%;"></iframe>
+		<!-- 底部 -->
+		<footer>
+		<hr>
+		<!-- Purchase a site license to remove this link from the footer: http://www.portnine.com/bootstrap-themes -->
+		<p>
+			© 2014 <a href="#" target="_blank">CNItcast</a>
+		</p>
+		</footer>
+	</div>
+	<script src="lib/bootstrap/js/bootstrap.js"></script>
+</html>

@@ -197,6 +197,7 @@ public class ClickStreamPageView {
 	public static void main(String[] args) throws Exception {
 
 		Configuration conf = new Configuration();
+		conf.set("mapred.job.queue.name", "root.root");
 		Job job = Job.getInstance(conf);
 
 		job.setJarByClass(ClickStreamPageView.class);
@@ -210,11 +211,11 @@ public class ClickStreamPageView {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 
-//		FileInputFormat.setInputPaths(job, new Path(args[0]));
-//		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		FileInputFormat.setInputPaths(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-		FileInputFormat.setInputPaths(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog"));
-		FileOutputFormat.setOutputPath(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog/pageviews"));
+//		FileInputFormat.setInputPaths(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog"));
+//		FileOutputFormat.setOutputPath(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog/pageviews"));
 
 		job.waitForCompletion(true);
 

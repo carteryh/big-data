@@ -64,10 +64,11 @@ public class WeblogPreProcess {
 //		String inPath = args[0];
 //		String outpath =args[1];
 
-		String inPath = "/Users/chenyouhong/Desktop/test/weblog";
-		String outpath = "/Users/chenyouhong/Desktop/test/output/weblog";
+//		String inPath = "/Users/chenyouhong/Desktop/test/weblog";
+//		String outpath = "/Users/chenyouhong/Desktop/test/output/weblog";
 
 		Configuration conf = new Configuration();
+		conf.set("mapred.job.queue.name", "root.root");
 		Job job = Job.getInstance(conf);
 
 		job.setJarByClass(WeblogPreProcess.class);
@@ -77,10 +78,10 @@ public class WeblogPreProcess {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);
 
-//		 FileInputFormat.setInputPaths(job, new Path(args[0]));
-//		 FileOutputFormat.setOutputPath(job, new Path(args[1]));
-		FileInputFormat.setInputPaths(job, new Path(inPath));
-		FileOutputFormat.setOutputPath(job, new Path(outpath));
+		 FileInputFormat.setInputPaths(job, new Path(args[0]));
+		 FileOutputFormat.setOutputPath(job, new Path(args[1]));
+//		FileInputFormat.setInputPaths(job, new Path(inPath));
+//		FileOutputFormat.setOutputPath(job, new Path(outpath));
 
 		job.setNumReduceTasks(0);
 

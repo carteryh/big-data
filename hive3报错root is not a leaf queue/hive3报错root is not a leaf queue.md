@@ -87,3 +87,9 @@ set mapred.job.queue.name=root.root;
 
 具体报错图片日志地址:
 
+https://github.com/carteryh/big-data/tree/main/hive3%E6%8A%A5%E9%94%99root%20is%20not%20a%20leaf%20queue
+
+相关大数据学习demo地址:
+
+https://github.com/carteryh/big-data
+

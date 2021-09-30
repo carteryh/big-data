@@ -102,6 +102,7 @@ public class ClickStreamVisit {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
+		conf.set("mapred.job.queue.name", "root.root");
 		Job job = Job.getInstance(conf);
 
 		job.setJarByClass(ClickStreamVisit.class);
@@ -116,10 +117,10 @@ public class ClickStreamVisit {
 		job.setOutputValueClass(VisitBean.class);
 		
 		
-//		FileInputFormat.setInputPaths(job, new Path(args[0]));
-//		FileOutputFormat.setOutputPath(job, new Path(args[1]));
-		FileInputFormat.setInputPaths(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog/pageviews"));
-		FileOutputFormat.setOutputPath(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog/pageviews/visitout"));
+		FileInputFormat.setInputPaths(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+//		FileInputFormat.setInputPaths(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog/pageviews"));
+//		FileOutputFormat.setOutputPath(job, new Path("/Users/chenyouhong/Desktop/test/output/weblog/pageviews/visitout"));
 		
 		boolean res = job.waitForCompletion(true);
 		System.exit(res?0:1);

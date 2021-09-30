@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:p="http://www.springframework.org/schema/p"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+         http://www.springframework.org/schema/context  
+         http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+         http://www.springframework.org/schema/aop  
+         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+         http://www.springframework.org/schema/tx   
+         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+        http://www.springframework.org/schema/mvc   
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        http://www.springframework.org/schema/cache 
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+        ">
+	<!-- DataSource -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath:jdbc.properties</value>
+		</property>
+	</bean>
+	<!-- DataSource Definition, using c3p0 connection pool -->
+	<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="minPoolSize" value="5" />  <!--连接池中保留的最小连接数。 -->
+		<property name="maxPoolSize" value="20" />  <!--连接池中保留的最大连接数。Default: 15 -->
+		<property name="maxIdleTime" value="60" />  <!--最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+		<property name="acquireIncrement" value="5" />  <!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+		<property name="maxStatements" value="0" />
+		<property name="initialPoolSize" value="10" />  <!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+		<property name="automaticTestTable" value="c3p0Test" />   <!--c3p0自动建立表c3p0Test测试连接的有效性 -->
+		<property name="idleConnectionTestPeriod" value="60" />  <!--每60秒检查所有连接池中的空闲连接。Default: 0 -->
+		<property name="acquireRetryAttempts" value="30" />  <!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+		<property name="testConnectionOnCheckout" value="false" />  <!--因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable等方法来提升连接测试的性能。Default: 
+			false -->
+	</bean>
+	<bean id="dataSourcePhoenix" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${phoenix.jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${phoenix.jdbc.url}" />
+		<property name="minPoolSize" value="5" />  <!--连接池中保留的最小连接数。 -->
+		<property name="maxPoolSize" value="20" />  <!--连接池中保留的最大连接数。Default: 15 -->
+		<property name="maxIdleTime" value="60" />  <!--最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+		<property name="acquireIncrement" value="5" />  <!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+		<property name="maxStatements" value="0" />
+		<property name="initialPoolSize" value="10" />  <!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+		<property name="idleConnectionTestPeriod" value="60" />  <!--每60秒检查所有连接池中的空闲连接。Default: 0 -->
+		<property name="acquireRetryAttempts" value="30" />  <!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+		<property name="testConnectionOnCheckout" value="false" />  <!--因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable等方法来提升连接测试的性能。Default: 
+			false -->
+	</bean>
+
+	<bean id="dynamicDataSource" class="cn.itcast.util.DynamicDataSource">
+		<!-- 通过key-value的形式来关联数据源 -->
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry value-ref="dataSourceDefault" key="dataSourceDefault"></entry>
+				<entry value-ref="dataSourcePhoenix" key="dataSourcePhoenix"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSourceDefault">
+		</property>
+	</bean>
+
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+			<value>messages</value>
+		</property>
+	</bean>
+
+	<!-- 事务配置 -->
+	<!-- <bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref local="dynamicDataSource" />
+		</property>
+	</bean> -->
+
+
+	<!-- 配置事务通知属性 -->
+	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager"> -->
+		<!-- 定义事务传播属性 -->
+		<!-- <tx:attributes>
+			对于数据查找，我们不希望别人这个时间去修改数据 如果当前没有事务就一非事务的方式执行
+			<tx:method name="get*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="list*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="login*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="show*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="select*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="login*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="getStatus*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="exist*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="find*" read-only="true" propagation="REQUIRED" />
+			<tx:method name="load*" read-only="true" propagation="REQUIRED" />
+			对于数据修改我们必须放到一个事务中 ，如果没有当前事务就新建一个事务 ，且事务不被触发回滚到Runtime异常
+			<tx:method name="*" isolation="SERIALIZABLE" propagation="REQUIRED"
+				read-only="false" no-rollback-for="java.lang.RuntimeException" />
+		</tx:attributes>
+	</tx:advice> -->
+
+
+	<!-- 事务通知切入点 -->
+	<!-- 1、第一个星号表示任意返回值 2、第二个型号表示任意类 3、第三个星号表示任意方法 4、最后两点表示任意参数 -->
+	<!-- <aop:config>
+		<aop:pointcut id="myBizOperation"
+			expression="execution(* cn.itcast.service..*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="myBizOperation" />
+	</aop:config> -->
+
+	<bean class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dynamicDataSource"></constructor-arg>
+	</bean>
+
+
+	<!-- 视图文件解析配置 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="false" />
+		<property name="favorParameter" value="true" />
+		<property name="ignoreAcceptHeader" value="false" />
+		<property name="mediaTypes">
+			<value>
+				atom=application/atom+xml
+				html=text/html
+				json=application/json
+				*=*/*
+			</value>
+		</property>
+	</bean>
+
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!-- 设置返回字符串编码 -->
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<!-- json转换器 -->
+				<bean
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 错误页面 -->
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- 表示当抛出NumberFormatException的时候就返回名叫number的视图 -->
+				<prop key="NumberFormatException">error/exception</prop>
+				<prop key="NullPointerException">error/exception</prop>
+			</props>
+		</property>
+		<!-- 表示当抛出异常但没有在exceptionMappings里面找到对应的异常时 返回名叫exception的视图 -->
+		<property name="defaultErrorView" value="error/exception" />
+		<!-- 定义在发生异常时视图跟返回码的对应关系 -->
+		<property name="statusCodes">
+			<props>
+				<!-- 表示在发生NumberFormatException时返回视图number，然后这里定义发生异常时视图number对应的HttpServletResponse的返回码是500 -->
+				<prop key="number">500</prop>
+				<prop key="null">503</prop>
+			</props>
+		</property>
+		<!-- 表示在发生异常时默认的HttpServletResponse的返回码是多少，默认是200 -->
+		<property name="defaultStatusCode" value="404" />
+	</bean>
+
+	<!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 -->
+	<mvc:default-servlet-handler />
+
+	<!-- 定义无Controller的path<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="redirect:/index.jsp" />
+
+
+	<!-- 下面配置的含义：解决了@Controller注解的使用前提配置 -->
+	<mvc:annotation-driven
+		content-negotiation-manager="contentNegotiationManager" />
+
+
+	<!-- 下面配置的含义：解决了@Controller标识的类的bean的注入和使用-->
+	<context:component-scan base-package="cn" />
+	
+ 
+</beans>  
